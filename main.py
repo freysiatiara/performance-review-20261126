@@ -43,6 +43,11 @@ def main():
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(text)
     os.chmod(path, 0o644)
+    # Read-back verification: confirm the bytes on disk match the entry.
+    with open(path, "rb") as f:
+        on_disk = f.read()
+    if on_disk != text.encode("utf-8"):
+        raise ValueError("output verification failed: bytes on disk differ")
 
 
 if __name__ == "__main__":
